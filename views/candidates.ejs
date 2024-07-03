@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidates</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('voteCountUpdate', function(data) {
+            const element = document.getElementById(`vote-count-${data.candidateId}`);
+            if (element) {
+                element.textContent = data.voteCount;
+            }
+        });
+
+        socket.on('candidateAdded', function() {
+            location.reload();
+        });
+
+        socket.on('candidateDeleted', function() {
+            location.reload();
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Candidates</h1>
+        <% if (isAdmin) { %>
+            <a href="/candidate/add" class="btn btn-primary mb-3">Add Candidate</a>
+        <% } %>
+        <a href="/user/change-password" class="btn btn-secondary mb-3">Change Password</a>
+        <a href="/user/logout" class="btn btn-secondary mb-3">Logout</a>
+        <ul class="list-group mt-3">
+            <% candidates.forEach(candidate => { %>
+                <li class="list-group-item">
+                    <%= candidate.name %> - <%= candidate.party %> - Age: <%= candidate.age %> - Votes: <span id="vote-count-<%= candidate._id %>"><%= candidate.voteCount %></span>
+                    <% if (!isAdmin) { %>
+                        <form action="/candidate/vote/<%= candidate._id %>" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-primary float-right">Vote</button>
+                        </form>
+                    <% } %>
+                    <% if (isAdmin) { %>
+                        <form action="/candidate/delete/<%= candidate._id %>" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-danger float-right">Delete</button>
+                        </form>
+                    <% } %>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('voteCountUpdate', function(data) {
+            const element = document.getElementById(`vote-count-${data.candidateId}`);
+            if (element) {
+                element.textContent = data.voteCount;
+            }
+        });
+
+        socket.on('candidateAdded', function() {
+            location.reload();
+        });
+
+        socket.on('candidateDeleted', function() {
+            location.reload();
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Welcome to the Voting App</h1>
+        <h2 class="mt-3">Candidates</h2>
+        <ul class="list-group mt-3">
+            <% candidates.forEach(candidate => { %>
+                <li class="list-group-item">
+                    <%= candidate.name %> - <%= candidate.party %> - Age: <%= candidate.age %> - Votes: <span id="vote-count-<%= candidate._id %>"><%= candidate.voteCount %></span>
+                </li>
+            <% }); %>
+        </ul>
+        <div class="mt-3">
+            <a href="/user/login" class="btn btn-primary">Login</a>
+            <a href="/user/signup" class="btn btn-secondary">Sign Up</a>
+        </div>
+    </div>
+</body>
+</html>

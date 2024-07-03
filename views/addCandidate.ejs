@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Candidate</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Add Candidate</h1>
+        <form action="/candidate/add" method="POST" class="mt-3">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" name="name" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="party">Party:</label>
+                <input type="text" class="form-control" name="party" id="party" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" class="form-control" name="age" id="age" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Candidate</button>
+        </form>
+    </div>
+</body>
+</html>
