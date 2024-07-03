@@ -18,7 +18,7 @@ const checkAdminRole = async (userID) => {
 // GET route to render home page with candidates for all users
 router.get('/', async (req, res) => {
     try {
-        const candidates = await Candidate.find({}, 'name party age voteCount');
+        const candidates = await Candidate.find({}, 'name party age voteCount').sort({ voteCount: -1 });
         res.render('home', { candidates });
     } catch (err) {
         console.error(err);
@@ -26,17 +26,20 @@ router.get('/', async (req, res) => {
     }
 });
 
+
 // GET route to render candidate page after login
 router.get('/candidates', jwtAuthMiddleware, async (req, res) => {
     try {
-        const candidates = await Candidate.find({}, 'name party age voteCount');
+        const candidates = await Candidate.find({}, 'name party age voteCount').sort({ voteCount: -1 });
         const isAdmin = await checkAdminRole(req.user.id);
         res.render('candidates', { candidates, isAdmin });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-});
+})
+
+
 
 // Admin route to render add candidate page
 router.get('/add', jwtAuthMiddleware, async (req, res) => {
